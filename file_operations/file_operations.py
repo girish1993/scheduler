@@ -11,8 +11,8 @@ class FileOperations(AbstractFileOperations):
         """
         Creating a constructor of the class File Operations
         """
-        self.input_dir_name = os.path.dirname("data/input")
-        self.output_dir_name = os.path.dirname("data/output")
+        self.input_dir_name = os.path.dirname("data/input/")
+        self.output_dir_name = os.path.dirname("data/output/")
         self.input_file_path = os.path.join(self.input_dir_name, "Barista_needed.csv")
         self.output_file_path = os.path.join(self.output_dir_name, "Barista_shifts_alloted.csv")
 
