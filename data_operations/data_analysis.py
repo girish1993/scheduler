@@ -53,7 +53,7 @@ class DataAnalyser:
         Method to check for syntactical and semantic errors in the data and correct them.
         The errors can arise out of 2 situations:
 
-        <li>Synatactical error could be a scenario where the integer data is presented as str. In which case,
+        <li>Syntactical error could be a scenario where the integer data is presented as str. In which case,
         we would typecast it to integer.</li?>
         <li>Semantic errors when the data in not within the limit of 1-6
         baristas. In which case, we would replace the failing conditional checks with right value</li?>
