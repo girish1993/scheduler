@@ -9,5 +9,5 @@ class AbstractShiftAllocator(ABC):
         pass
 
     @abstractmethod
-    def perform_allocation(self):
+    def perform_allocation(self, shift, partition):
         pass

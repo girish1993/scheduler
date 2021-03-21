@@ -1,5 +1,8 @@
-from collections import Counter
+from shift_allocator.utility import ShiftUtility
 from shift_allocator.abstract_shift_allocator import AbstractShiftAllocator
+from statistics import mode
+from statistics import mean
+import math
 
 BARISTAS_NEEDED = "Total number of Baristas needed"
 
@@ -13,6 +16,7 @@ class ShiftAllocator(AbstractShiftAllocator):
         self.demand_data = list(self.get_data()[BARISTAS_NEEDED])
         self.two_shift_dicts = {}
         self.three_shift_dicts = {}
+        self.allocated_shifts = {}
 
     def get_data(self):
         return self.data
@@ -34,6 +38,13 @@ class ShiftAllocator(AbstractShiftAllocator):
 
     def get_three_shift_dicts(self):
         return self.three_shift_dicts
+
+    def get_allocated_shifts(self):
+        return self.allocated_shifts
+
+    def add_shifts(self, index, no_of_baristas):
+        if index not in self.get_allocated_shifts():
+            self.allocated_shifts[index] = no_of_baristas
 
     def set_two_shift_dicts(self, key):
         if key not in self.two_shift_dicts:
@@ -61,14 +72,41 @@ class ShiftAllocator(AbstractShiftAllocator):
         for each_three_shift in self.get_three_shift_partitions():
             print("creating partition for {}".format(each_three_shift))
             self.set_three_shift_dicts(each_three_shift)
-        print(self.get_three_shift_dicts())
 
     def check_two_shift_feasibility(self):
-        pass
+        for shift, partition in self.get_two_shift_dicts().items():
+            if ShiftUtility().check_for_optimum_result_two_shifts(shift, partition):
+                self.perform_allocation(shift, partition)
+
+    def check_three_shift_feasibility(self):
+        for shift, partition in self.get_three_shift_dicts().items():
+            if ShiftUtility().check_for_optimum_result_three_shifts(shift, partition):
+                self.perform_allocation(shift, partition)
 
     def check_allocation(self):
         self.create_two_shift_partitions()
         self.create_three_shift_partitions()
+        if not self.check_two_shift_feasibility():
+            self.check_three_shift_feasibility()
 
-    def perform_allocation(self):
-        pass
+    def perform_allocation(self, shift, partition):
+        if shift == (3, 3, 4):
+            part_a_alloc = mode(partition[0])
+            part_b_alloc = mode(partition[1])
+            part_c_alloc = int(math.ceil(mean(partition[2])))
+            self.add_shifts(shift, (part_a_alloc, part_b_alloc, part_c_alloc))
+        elif shift == (3, 4, 3):
+            part_a_alloc = mode(partition[0])
+            part_b_alloc = int(math.ceil(mean(partition[1])))
+            part_c_alloc = mode(partition[2])
+            self.add_shifts(shift, (part_a_alloc, part_b_alloc, part_c_alloc))
+        elif shift == (4, 3, 3):
+            part_a_alloc = int(math.ceil(mean(partition[0])))
+            part_b_alloc = mode(partition[1])
+            part_c_alloc = mode(partition[2])
+            self.add_shifts(shift, (part_a_alloc, part_b_alloc, part_c_alloc))
+        else:
+            part_a_alloc = mode(partition[0])
+            part_b_alloc = mode(partition[1])
+            self.add_shifts(shift, (part_a_alloc, part_b_alloc))
+
