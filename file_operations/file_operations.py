@@ -6,6 +6,10 @@ import logging as LOGGER
 
 
 class FileOperations(AbstractFileOperations):
+    """
+    A class to implement and perform all operations in relation to a file. The main operations include, reading the
+    contents of the file, checking for the file's existence and writing to a file.
+    """
 
     def __init__(self):
         """
