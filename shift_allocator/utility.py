@@ -2,9 +2,22 @@ from collections import Counter
 
 
 class ShiftUtility:
+    """
+    THe Utility class for shift Allocator that checks for all the feasibility against all the business rules established.
+    """
 
     @staticmethod
     def check_for_optimum_result_two_shifts(shift, partition):
+        """
+        This method checks if any of the possible combination of shift and partition is desirable and good enough to perform shift allocation.
+        :param shift: The time indicies of time column for which there should be a shift
+        :type shift: tuple
+        :param partition: The demand for the corresponding shifts
+        :type partition: tuple
+        :return: True if optimum. False otherwise
+        :rtype: bool
+
+        """
         partition_type = "two"
         if shift == (7, 3) or shift == (3, 7):
             count_A, count_B, distinct_elements_A, distinct_elements_B = ShiftUtility.get_stats(partition, partition_type)
@@ -38,6 +51,15 @@ class ShiftUtility:
 
     @staticmethod
     def check_for_optimum_result_three_shifts(shift, partition):
+        """
+        Method to check if any of the possible 3 shift partitions can produce an appropriate allocation.
+        :param shift: The time indicies of time column for which there should be a shift
+        :type shift: tuple
+        :param partition: The demand for the corresponding shifts
+        :type partition: tuple
+        :return: True if optimum. False otherwise
+        :rtype: bool
+        """
         partition_type = "three"
         if shift == (3, 3, 4):
             count_A, count_B, distinct_elements_A, distinct_elements_B, count_C, distinct_elements_C = ShiftUtility().get_stats(partition, partition_type)
@@ -61,6 +83,15 @@ class ShiftUtility:
 
     @staticmethod
     def get_stats(partition, partition_type):
+        """
+        Method to get stats in terms of occurrences of each of the elements in the partition and distict elements
+        :param partition: The list of tuples representing partitions in the demand
+        :type partition: List
+        :param partition_type: string indicating if its two shift partition or three shift
+        :type partition_type: str
+        :return: tuple of counts and distinct elements
+        :rtype: tuple
+        """
         if partition_type == "two":
             count_A = Counter(partition[0])
             distinct_elements_A = set(partition[0])
